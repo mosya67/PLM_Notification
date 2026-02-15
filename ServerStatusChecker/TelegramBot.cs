@@ -7,6 +7,7 @@ namespace ServerStatusChecker
     public class TelegramBot
     {
         private readonly ITelegramBotClient client;
+        const int FiveMinInMillisec = 300_000;
 
         public TelegramBot(ITelegramBotClient botClient)
         {
@@ -55,7 +56,7 @@ namespace ServerStatusChecker
                         if (!result) await client.SendMessage(message.Chat.Id, "Сервак упал");
 
                         // 300.000 миллисеккунд это 5 минут
-                        Thread.Sleep(300_000);
+                        Thread.Sleep(FiveMinInMillisec);
                     }
                 });
             }

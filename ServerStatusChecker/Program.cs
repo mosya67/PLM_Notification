@@ -11,12 +11,10 @@ namespace ServerStatusChecker
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
-            builder.Services.AddControllers();
             builder.Services.AddHttpClient();
             builder.Services.AddHostedService<HealthCheckWorker>();
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+            // зарегать бота
+            // зарегать бд
             builder.Services.AddOpenApi();
 
             var app = builder.Build();
@@ -24,9 +22,6 @@ namespace ServerStatusChecker
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
-
-            app.MapControllers();
 
             app.Run();
         }

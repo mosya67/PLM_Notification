@@ -13,7 +13,7 @@ namespace ServerStatusChecker.Controllers
             _httpClient = httpClientFactory.CreateClient();
         }
 
-        [HttpGet("check/{url}")]
+        [HttpGet($"/Health")]
         public async Task<IActionResult> CheckServer(string url)
         {
             try

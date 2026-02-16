@@ -6,6 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Database
 {
+    // TODO: попробовать использовать redis. Пр падении приложения, бд не падает. бд умрет только если упадет сервер redis'а, но можно настроить сохранение на диск
+    // Кстати надо настраивать redis
+    // "Все работает стабильно, но раз в сутки все данные почему-то пропадают. Просто затираются. И далее запись БД (redis-cli save) невожможна. Error и все."
+    // "Ваша проблема: дефолтные настройки директивы save не подходят к Вашему приложению."
+    // https://qna.habr.com/q/491956
     public class Context : DbContext
     {
         protected Context(string ConnectionString)

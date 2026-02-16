@@ -7,7 +7,6 @@ namespace ServerStatusChecker
 {
     public class Program
     {
-        const int FiveMinInMillisec = 300_000;
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);

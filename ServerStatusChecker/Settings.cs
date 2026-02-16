@@ -4,5 +4,6 @@
     {
         public const string ConnectionString = "Data Source=usersdata.db";
         public const string EndPointPLM = $"http://union-test/Health"; // возвращается просто 200 статус с телом {"status":"Server is running"}
+        public const string Token = "8378836116:AAHpPaHX6tWUO0zywhFbQY9pa3laVi6ieeU";
     }
 }

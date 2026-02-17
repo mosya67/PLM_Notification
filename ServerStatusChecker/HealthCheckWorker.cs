@@ -2,11 +2,11 @@
 {
     public class HealthCheckWorker : BackgroundService
     {
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IConfiguration config;
 
-        public HealthCheckWorker(IHttpClientFactory httpClientFactory)
+        public HealthCheckWorker(IConfiguration config)
         {
-            _httpClientFactory = httpClientFactory;
+            this.config = config;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -17,10 +17,10 @@
                 {
                     var response = await HttpHelper.CheckStatusAsync($"http://union-test/Health");
 
-                    if (response)
-                        Console.WriteLine("сервер воркинг");
-                    else
+                    if (!response)
                         Console.WriteLine($"сервер упаль");
+                    else
+                        Console.WriteLine("Живой");
                 }
                 catch (Exception ex)
                 {
@@ -28,7 +28,7 @@
                 }
 
                 // Ждем 6 секунд перед следующей итерацией
-                await Task.Delay(TimeSpan.FromSeconds(6), stoppingToken);
+                await Task.Delay(TimeSpan.FromSeconds(config.GetValue<long>("DelayInSeconds")), stoppingToken);
             }
         }
     }

@@ -1,35 +1,33 @@
 ﻿using Telegram.Bot;
+using TelegramTypes = Telegram.Bot.Types;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
 namespace ServerStatusChecker
 {
-    public class TelegramBot
+    public class TelegramBot : BackgroundService
     {
         private readonly ITelegramBotClient client;
         private readonly IConfiguration config;
+        private readonly INotificationService notificationService;
 
-        public TelegramBot(ITelegramBotClient client, IConfiguration config)
+        public TelegramBot(ITelegramBotClient client, IConfiguration config, INotificationService notificationService)
         {
             this.client = client;
             this.config = config;
+            this.notificationService = notificationService;
         }
 
-        public async Task StartBot()
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            this.client.StartReceiving(Update, Error);
+            this.client.StartReceiving(Update, Error, cancellationToken: stoppingToken);
         }
 
         private async Task Update(ITelegramBotClient client, Update update, CancellationToken token)
         {
-            if (update.Type == UpdateType.Message)
+            if (update?.Type == UpdateType.Message)
             {
                 await HandleMessage(client, update.Message);
-            }
-            // обработчик кнопок в боте(кнопок, которок под сообщением висят). Оставлю на всякий, на будущее
-            else if (update?.Type == UpdateType.CallbackQuery) 
-            {
-                //await HandleCallBackQuery(client, update.CallbackQuery);
             }
         }
 
@@ -43,21 +41,24 @@ namespace ServerStatusChecker
 
         private async Task HandleMessage(ITelegramBotClient client, Message message)
         {
-            if (message?.Text?.ToLower() == "/status")
+            if (message?.Text == "/status")
             {
                 // Вызов метода проверки сервера
-                bool result = await HttpHelper.CheckStatusAsync($"http://union-test/Health");
-                if (!result) await SendMessageAsync(message.Chat.Id, "Сервак упал");
+                bool result = await HttpHelper.CheckStatusAsync(config.GetValue<string>("EndPointPLM"));
+                if (result)
+                    await notificationService.NotifyAsync(message.Chat.Id, "Сервак жив");
+                else
+                    await notificationService.NotifyAsync(message.Chat.Id, "Сервак упал");
             }
-            if (message?.Text?.ToLower() == "/registration")
+            else if (message?.Text == "/registration")
             {
+                await notificationService.NotifyAsync(message.Chat.Id, "Пока нет функционала для этой команды");
                 // Добавление ChatId в бд
             }
-        }
-
-        public async Task<Message> SendMessageAsync(ChatId chatId, string text)
-        {
-            return await this.client.SendMessage(chatId, text);
+            else
+            {
+                await notificationService.NotifyAsync(message.Chat.Id, "Неизвестаная команда");
+            }
         }
     }
 }

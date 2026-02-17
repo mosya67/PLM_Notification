@@ -1,5 +1,7 @@
 
 using Microsoft.AspNetCore.Http.HttpResults;
+using Telegram.Bot;
+using Telegram.Bot.Types;
 
 #pragma warning disable CS4014
 
@@ -11,17 +13,16 @@ namespace ServerStatusChecker
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddHttpClient();
+            builder.Services.AddSingleton<ITelegramBotClient>(new TelegramBotClient(builder.Configuration.GetValue<string>("BotToken")));
+            builder.Services.AddSingleton<INotificationService, TelegramNotification>();
             builder.Services.AddHostedService<HealthCheckWorker>();
-            // зарегать бота
+            builder.Services.AddHostedService<TelegramBot>();
             // зарегать бд
             builder.Services.AddOpenApi();
 
             var app = builder.Build();
 
             app.UseHttpsRedirection();
-
-            app.UseAuthorization();
 
             app.Run();
         }

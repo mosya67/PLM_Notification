@@ -8,7 +8,7 @@ namespace Database
 {
     public class Context : DbContext
     {
-        public DbSet<TgUser> TgUsers { get; set; }
+        public DbSet<User> Users { get; set; }
         private readonly string ConnectionString;
         public Context(string ConnectionString)
         {

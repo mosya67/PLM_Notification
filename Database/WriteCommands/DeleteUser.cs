@@ -18,9 +18,9 @@ namespace Database.WriteCommands
 
         public async Task Write(long id)
         {
-            TgUser user = await context.TgUsers.SingleOrDefaultAsync(e => e.TgUserId == id);
+            User user = await context.Users.SingleOrDefaultAsync(e => e.UserId == id);
             if (user == null) return;
-            context.TgUsers.Remove(user);
+            context.Users.Remove(user);
             await context.SaveChangesAsync();
         }
     }

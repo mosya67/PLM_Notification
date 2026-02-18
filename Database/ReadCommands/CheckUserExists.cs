@@ -17,7 +17,7 @@ namespace Database.ReadCommands
 
         public async Task<bool> Read(long id)
         {
-            return await context.TgUsers.AnyAsync(e => e.TgUserId == id);
+            return await context.Users.AnyAsync(e => e.UserId == id);
         }
     }
 }

@@ -4,8 +4,8 @@ using System.Text;
 
 namespace Database.Model
 {
-    public class TgUser
+    public class User
     {
-        public long TgUserId { get; set; }
+        public long UserId { get; set; }
     }
 }

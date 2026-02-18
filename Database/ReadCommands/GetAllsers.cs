@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Database.ReadCommands
 {
-    public class GetAllsers : IReadCommand<IEnumerable<TgUser>>
+    public class GetAllsers : IReadCommand<IEnumerable<User>>
     {
         private readonly Context context;
 
@@ -16,9 +16,9 @@ namespace Database.ReadCommands
             this.context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<IEnumerable<TgUser>> Read()
+        public async Task<IEnumerable<User>> Read()
         {
-            return await context.TgUsers.ToListAsync();
+            return await context.Users.ToListAsync();
         }
     }
 }

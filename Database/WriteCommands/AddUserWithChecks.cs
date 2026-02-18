@@ -20,10 +20,9 @@ namespace Database.WriteCommands
 
         public async Task Write(long id)
         {
-            TgUser user = new();
-            user.TgUserId = id;
+            User user = new() { UserId = id };
             if (await checkUserExists.Read(id)) return;
-            await context.TgUsers.AddAsync(user);
+            await context.Users.AddAsync(user);
             await context.SaveChangesAsync();
         }
     }

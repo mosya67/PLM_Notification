@@ -60,10 +60,13 @@ namespace ServerStatusChecker.BackgroundServices
                     else
                         await notificationService.NotifyAsync(message.Chat.Id, "Сервак не отвечает!");
                 }
-                else if (message?.Text == "/registration")
+                else if (message?.Text == "/subscribe")
                 {
                     if (await checkUserExists.Read(message.Chat.Id))
+                    {
                         await notificationService.NotifyAsync(message.Chat.Id, "Вы уже подписаны");
+                        return;
+                    }
 
                     await addUser.Write(message.Chat.Id);
                     await notificationService.NotifyAsync(message.Chat.Id, "Вы подписались на уведомления о сбоях сервера");
@@ -71,10 +74,13 @@ namespace ServerStatusChecker.BackgroundServices
                 else if (message?.Text == "/unsubscribe")
                 {
                     if (!await checkUserExists.Read(message.Chat.Id))
+                    {
                         await notificationService.NotifyAsync(message.Chat.Id, "Вы и так не подписаны");
+                        return;
+                    }
 
                     await deleteUser.Write(message.Chat.Id);
-                    await notificationService.NotifyAsync(message.Chat.Id, "Вы подписались на уведомления о сбоях сервера");
+                    await notificationService.NotifyAsync(message.Chat.Id, "Вы отписались от уведомлений о сбоях сервера");
                 }
                 else
                 {

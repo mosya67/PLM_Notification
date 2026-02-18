@@ -3,13 +3,13 @@ using Database.Model;
 
 namespace ServerStatusChecker.BackgroundServices
 {
-    public class HealthCheckWorker : BackgroundService
+    public class StatusChecker : BackgroundService
     {
         private readonly IConfiguration config;
         private readonly INotificationService notificationService;
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public HealthCheckWorker(IConfiguration config, INotificationService notificationService, IServiceScopeFactory serviceScopeFactory)
+        public StatusChecker(IConfiguration config, INotificationService notificationService, IServiceScopeFactory serviceScopeFactory)
         {
             this.config = config ?? throw new ArgumentNullException(nameof(config));
             this.notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
@@ -27,17 +27,17 @@ namespace ServerStatusChecker.BackgroundServices
                     {
                         if (!response)
                         {
-                            var getAllUsers = scope.ServiceProvider.GetRequiredService<IReadCommand<IEnumerable<TgUser>>>();
-                            IEnumerable<TgUser> users = await getAllUsers.Read();
-                            await notificationService.NotifyAsync(users.Select(e => e.TgUserId), "Сервер не отвечает!");
+                            var getAllUsers = scope.ServiceProvider.GetRequiredService<IReadCommand<IEnumerable<User>>>();
+                            IEnumerable<User> users = await getAllUsers.Read();
+                            await notificationService.NotifyAsync(users.Select(e => e.UserId), "Сервер не отвечает!");
                         }
                         // для тестов
-                        //else
-                        //{
-                        //    var getAllUsers = scope.ServiceProvider.GetRequiredService<IReadCommand<IEnumerable<TgUser>>>();
-                        //    IEnumerable<TgUser> users = await getAllUsers.Read();
-                        //    await notificationService.NotifyAsync(users.Select(e => e.TgUserId), "Сервер живет!");
-                        //}
+                        else
+                        {
+                            var getAllUsers = scope.ServiceProvider.GetRequiredService<IReadCommand<IEnumerable<User>>>();
+                            IEnumerable<User> users = await getAllUsers.Read();
+                            await notificationService.NotifyAsync(users.Select(e => e.UserId), "Сервер живет!");
+                        }
                     }
                 }
                 catch (Exception ex)

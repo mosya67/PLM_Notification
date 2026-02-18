@@ -82,9 +82,13 @@ namespace ServerStatusChecker.BackgroundServices
                     await deleteUser.Write(message.Chat.Id);
                     await notificationService.NotifyAsync(message.Chat.Id, "Вы отписались от уведомлений о сбоях сервера");
                 }
+                else if (message?.Text == "/commands")
+                {
+                    await notificationService.NotifyAsync(message.Chat.Id, "Команды:\n/status\n/unsubscribe\n/subscribe\n/commands");
+                }
                 else
                 {
-                    await notificationService.NotifyAsync(message.Chat.Id, "Неизвестаная команда");
+                    await notificationService.NotifyAsync(message.Chat.Id, "Неизвестная команда. Список команд /commands");
                 }
             }
         }

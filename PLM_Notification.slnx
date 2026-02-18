@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="Core/Core.csproj" Id="6538895a-a5f8-4f78-89bf-09491df8d55f" />
   <Project Path="Database/Database.csproj" Id="5acfa0ec-162a-4a8a-97f6-565bcf00bb57" />
   <Project Path="ServerStatusChecker/ServerStatusChecker.csproj" Id="1930cebd-45e2-4a54-b745-26f697b726b3" />
 </Solution>

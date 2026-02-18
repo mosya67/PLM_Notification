@@ -1,6 +1,4 @@
-﻿using Telegram.Bot.Types;
-
-namespace ServerStatusChecker
+﻿namespace ServerStatusChecker
 {
     public interface INotificationService
     {

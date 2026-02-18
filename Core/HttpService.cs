@@ -2,7 +2,7 @@
 
 namespace ServerStatusChecker
 {
-    public static class HttpHelper
+    public static class HttpService
     {
         public static async Task<bool> CheckStatusAsync(string url)
         {

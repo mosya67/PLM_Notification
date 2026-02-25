@@ -41,7 +41,6 @@ namespace ServerStatusChecker.BackgroundServices
         {
             string message = '\n' + ex.GetType().Name + '\n' + ex.Message + '\n' + ex.InnerException?.Message + '\n' + ex.StackTrace;
             Console.WriteLine(message);
-            throw new Exception(message);
         }
 
         private async Task HandleMessage(ITelegramBotClient client, Message message)
@@ -85,6 +84,10 @@ namespace ServerStatusChecker.BackgroundServices
                 else if (message?.Text == "/commands")
                 {
                     await notificationService.NotifyAsync(message.Chat.Id, "Команды:\n/status\n/unsubscribe\n/subscribe\n/commands");
+                }
+                else if (message?.Text == "/ex")
+                {
+                    throw new Exception("проверка");
                 }
                 else
                 {

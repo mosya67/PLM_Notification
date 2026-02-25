@@ -85,10 +85,6 @@ namespace ServerStatusChecker.BackgroundServices
                 {
                     await notificationService.NotifyAsync(message.Chat.Id, "Команды:\n/status\n/unsubscribe\n/subscribe\n/commands");
                 }
-                else if (message?.Text == "/ex")
-                {
-                    throw new Exception("проверка");
-                }
                 else
                 {
                     await notificationService.NotifyAsync(message.Chat.Id, "Неизвестная команда. Список команд /commands");

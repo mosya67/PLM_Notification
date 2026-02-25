@@ -13,14 +13,14 @@ namespace ServerStatusChecker.BackgroundServices
         private readonly ITelegramBotClient client;
         private readonly IConfiguration config;
         private readonly INotificationService notificationService;
-        private readonly IServiceScopeFactory _serviceScopeFactory;
+        private readonly IServiceScopeFactory serviceScopeFactory;
 
         public TelegramBot(ITelegramBotClient client, IConfiguration config, INotificationService notificationService, IServiceScopeFactory serviceScopeFactory)
         {
             this.client = client ?? throw new ArgumentNullException(nameof(client));
             this.config = config ?? throw new ArgumentNullException(nameof(config));
             this.notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
-            _serviceScopeFactory = serviceScopeFactory ?? throw new ArgumentNullException(nameof(serviceScopeFactory));
+            this.serviceScopeFactory = serviceScopeFactory ?? throw new ArgumentNullException(nameof(serviceScopeFactory));
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -28,14 +28,21 @@ namespace ServerStatusChecker.BackgroundServices
             this.client.StartReceiving(Update, Error, cancellationToken: stoppingToken);
         }
 
+        /// <summary>
+        /// Обработчик бота
+        /// </summary>
         private async Task Update(ITelegramBotClient client, Update update, CancellationToken token)
         {
             if (update?.Type == UpdateType.Message)
             {
+                // Обработку текстовых команд вынес в отдельный метод
                 await HandleMessage(client, update.Message);
             }
         }
 
+        /// <summary>
+        /// Обработчик ошибок
+        /// </summary>
         private async Task Error<T>(ITelegramBotClient client, T ex, CancellationToken token)
             where T : Exception
         {
@@ -43,9 +50,12 @@ namespace ServerStatusChecker.BackgroundServices
             Console.WriteLine(message);
         }
 
+        /// <summary>
+        /// Обработчик текстовых команд
+        /// </summary>
         private async Task HandleMessage(ITelegramBotClient client, Message message)
         {
-            using (var scope = _serviceScopeFactory.CreateScope())
+            using (var scope = serviceScopeFactory.CreateScope())
             {
                 var checkUserExists = scope.ServiceProvider.GetRequiredService<IReadCommand<bool, long>>();
                 var addUser = scope.ServiceProvider.GetKeyedService<IWriteCommand<long>>("AddUser");

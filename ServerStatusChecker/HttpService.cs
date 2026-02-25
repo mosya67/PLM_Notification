@@ -6,7 +6,6 @@ namespace ServerStatusChecker
     {
         public static async Task<bool> CheckStatusAsync(string url)
         {
-            // Здесь вы можете отправить запрос к вашему ASP.NET Core API
             using (var httpClient = new HttpClient())
             {
                 var response = await httpClient.GetAsync(url);

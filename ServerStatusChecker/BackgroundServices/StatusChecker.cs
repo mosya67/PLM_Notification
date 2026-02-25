@@ -3,6 +3,9 @@ using Database.Model;
 
 namespace ServerStatusChecker.BackgroundServices
 {
+    /// <summary>
+    /// Сервис для проверки состояния сервера. Работает в фоне
+    /// </summary>
     public class StatusChecker : BackgroundService
     {
         private readonly IConfiguration config;

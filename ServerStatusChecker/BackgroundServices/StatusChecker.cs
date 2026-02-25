@@ -34,13 +34,6 @@ namespace ServerStatusChecker.BackgroundServices
                             IEnumerable<User> users = await getAllUsers.Read();
                             await notificationService.NotifyAsync(users.Select(e => e.UserId), "Сервер не отвечает!");
                         }
-                        // для тестов
-                        //else
-                        //{
-                        //    var getAllUsers = scope.ServiceProvider.GetRequiredService<IReadCommand<IEnumerable<User>>>();
-                        //    IEnumerable<User> users = await getAllUsers.Read();
-                        //    await notificationService.NotifyAsync(users.Select(e => e.UserId), "Сервер живет!");
-                        //}
                     }
                 }
                 catch (Exception ex)
